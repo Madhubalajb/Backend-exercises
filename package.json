@@ -1,0 +1,30 @@
+{
+  "name": "backend-exercises",
+  "version": "1.0.0",
+  "description": "Backend exercises for Full Stack Open 2019 Course.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Madhubalajb/Backend-exercises.git"
+  },
+  "keywords": [
+    "Backend"
+  ],
+  "author": "Madhubala Jayakumaran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Madhubalajb/Backend-exercises/issues"
+  },
+  "homepage": "https://github.com/Madhubalajb/Backend-exercises#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
