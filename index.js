@@ -5,7 +5,11 @@ const app = express()
 const PORT = 3001
 
 app.use(bodyParser.json())
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :response-time ms - :body - :res[content-length] - :req[content-length]'))
+
+morgan.token('body', (request, response) => {
+    return JSON.stringify(request.body)
+})
 
 let persons = [
     {
