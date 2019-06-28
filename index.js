@@ -1,15 +1,17 @@
 const express = require("express")
 const bodyParser = require("body-parser")
-const morgan = require("morgan")
+//const morgan = require("morgan")
+const cors = require("cors")
 const app = express()
 const PORT = process.env.PORT || 3001
 
 app.use(bodyParser.json())
-app.use(morgan(':method :url :status :response-time ms - :body - :res[content-length] - :req[content-length]'))
+//app.use(morgan(':method :url :status :response-time ms - :body - :res[content-length] - :req[content-length]'))
+app.use(cors())
 
-morgan.token('body', (request, response) => {
-    return JSON.stringify(request.body)
-})
+// morgan.token('body', (request, response) => {
+//     return JSON.stringify(request.body)
+// })
 
 let persons = [
     {
