@@ -5,6 +5,7 @@ const cors = require("cors")
 const app = express()
 const PORT = process.env.PORT || 3001
 
+app.use(express.static('build'))
 app.use(bodyParser.json())
 //app.use(morgan(':method :url :status :response-time ms - :body - :res[content-length] - :req[content-length]'))
 app.use(cors())
