@@ -17,18 +17,18 @@ app.use(cors())
 let persons = [
     {
         id: 1,
-        name: "Madhubala",
-        number: "8907834567"
+        name: "Arto Hellas",
+        number: "040-123456"
     },
     {
         id: 2,
-        name: "Jayavarshini",
-        number: "8345671234"
+        name: "Ada Lovelace",
+        number: "39-44-5323523"
     },
     {
         id: 3,
-        name: "Bharathi",
-        number: "9345671234"
+        name: "Dan Abramov",
+        number: "12-43-234345"
     }
 ]
 
