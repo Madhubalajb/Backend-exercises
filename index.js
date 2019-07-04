@@ -71,6 +71,20 @@ app.put('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+const unknownEndPoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndPoint)
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+    if(error.name === 'CastError' && error.kind == 'ObjectId') {
+        response.status(400).send({ error: 'mals=formatted id' })
+    }
+    next(error)
+}
+app.use(errorHandler)
+
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`);
 })
