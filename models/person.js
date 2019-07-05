@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 
 const url = String(process.env.MONGODB_URI)
-
+console.log(process.env.MONGODB_URI)
 console.log(`Connecting to ${url}`)
 
 mongoose.connect(url, { useNewUrlParser: true })
