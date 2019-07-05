@@ -1,11 +1,12 @@
-if(process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
+const env = String(process.env.NODE_ENV)
+if ( env != 'production') {
+    require('dotenv').config()
+  }
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const app = express()
-const PORT = process.env.PORT
+
 const Person = require("./models/person")
 
 app.use(express.static('build'))
@@ -36,7 +37,7 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
     const person = new Person({
         name: body.name,
@@ -53,7 +54,7 @@ app.post('/api/persons', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
         response.status(204).end()
     })
     .catch(error => next(error))
@@ -89,6 +90,7 @@ const errorHandler = (error, request, response, next) => {
 }
 app.use(errorHandler)
 
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 })
