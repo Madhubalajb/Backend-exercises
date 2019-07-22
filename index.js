@@ -1,7 +1,8 @@
 const env = String(process.env.NODE_ENV)
-if ( env != 'production') {
+if (env != 'production') {
     require('dotenv').config()
-  }
+}
+
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
