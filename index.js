@@ -4,92 +4,19 @@ if (env != 'production') {
 }
 
 const express = require("express")
-const bodyParser = require("body-parser")
 const cors = require("cors")
+const personRoute = require('./routes/persons')
 const app = express()
 
-const Person = require("./models/person")
-
 app.use(express.static('build'))
-app.use(bodyParser.json())
+app.use(express.json())
 app.use(cors())
+app.use('/api/persons', personRoute)
 
 //const morgan = require("morgan")
 //app.use(morgan(':method :url :status :response-time ms - :body - :res[content-length] - :req[content-length]'))
 // morgan.token('body', (request, response) => {
 //     return JSON.stringify(request.body) })
-
-app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons => {
-        response.json(persons.map(person => person.toJSON()))
-    })
-})
-
-app.get('/api/persons/:id', (request, response, next) => {
-    Person.findById(request.params.id)
-    .then(person => {
-        if(person) {
-            response.json(person.toJSON())
-        }
-        else {
-            response.status(404).end()
-        }
-    })
-    .catch(error => next(error))
-})
-
-app.post('/api/persons', (request, response, next) => {
-    const body = request.body
-    const person = new Person({
-        name: body.name,
-        number: body.number
-    })
-    person
-    .save()
-    .then(savedPerson => savedPerson.toJSON())
-    .then(savedAndFormattedPerson => {
-        response.json(savedAndFormattedPerson)
-    })
-    .catch(error => next(error))
-})
-
-app.delete('/api/persons/:id', (request, response, next) => {
-    Person.findByIdAndRemove(request.params.id)
-    .then(() => {
-        response.status(204).end()
-    })
-    .catch(error => next(error))
-})
-
-app.put('/api/persons/:id', (request, response, next) => {
-    const body = request.body
-    const person = {
-        name: body.name,
-        number: body.number,
-    }
-    Person.findByIdAndUpdate(request.params.id, person, {new: true})
-    .then(updatedPerson => {
-        response.json(updatedPerson.toJSON())
-    })
-    .catch(error => next(error))
-})
-
-const unknownEndPoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-}
-app.use(unknownEndPoint)
-
-const errorHandler = (error, request, response, next) => {
-    console.error(error.message);
-    if(error.name === 'CastError' && error.kind == 'ObjectId') {
-        response.status(400).send({ error: 'mals=formatted id' })
-    }
-    else if(error.name === 'ValidationError') {
-        response.status(400).send({ error: error.message })
-    }
-    next(error)
-}
-app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
