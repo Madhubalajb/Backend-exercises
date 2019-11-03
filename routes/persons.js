@@ -9,7 +9,7 @@ router.get('/', async (request, response) => {
         response.json(persons)
     } 
     catch (error) {
-        response.status(500).json({message: error})
+        response.status(500).json({message: error}) //Internal server error
     }  
 })
 
@@ -25,11 +25,11 @@ router.post('/', async (request, response) => {
         number: request.body.number
     })
     try {
-        const newPerson = await Person.save()
-        response.status(201).json(newPerson)
+        const newPerson = await person.save()
+        response.status(201).json(newPerson) //Created
     }
     catch(error) {
-        response.status(400).json({message: error})
+        response.status(400).json({message: error}) //Bad Request
     }
 })
 
@@ -40,7 +40,7 @@ router.delete('/:id', getPerson, async(request, response) => {
         response.json({message: 'Deleted Person'})
     }
     catch(error) {
-        response.status(500).json({message: error})
+        response.status(500).json({message: error}) //Internal server error
     }
 })
 
@@ -64,7 +64,7 @@ async function getPerson(request, response, next) {
     try {
         person = await Person.findById(request.params.id)
         if(person == null)
-            return response.status(404).json({message: 'Cannot find person'})
+            return response.status(404).json({message: 'Cannot find person'}) //Not Found
     }
     catch(error) {
         return response.status(500).json({message: error})
