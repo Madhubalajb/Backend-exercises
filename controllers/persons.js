@@ -1,4 +1,4 @@
-const expenseRouter = require('express').router()
+const personsRouter = require('express').Router()
 const Person = require("../models/Person")
 
 router.get('/', async (request, response) => {
@@ -67,4 +67,4 @@ async function getPerson(request, response, next) {
     next()
 }
 
-module.exports = expenseRouter
+module.exports = personsRouter
