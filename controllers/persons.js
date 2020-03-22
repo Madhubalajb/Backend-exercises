@@ -1,8 +1,6 @@
-const express = require('express')
-const router = express.Router()
-const Person = require("../models/person")
+const expenseRouter = require('express').router()
+const Person = require("../models/Person")
 
-//Getting all persons
 router.get('/', async (request, response) => {
     try {
         const persons = await Person.find()
@@ -13,12 +11,10 @@ router.get('/', async (request, response) => {
     }  
 })
 
-//Getting specific person
 router.get('/:id', getPerson, (request, response) => {
     response.json(response.person)
 })
 
-//Creating a perosn
 router.post('/', async (request, response) => {
     const person = new Person({
         name: request.body.name,
@@ -33,7 +29,6 @@ router.post('/', async (request, response) => {
     }
 })
 
-//Deleting a person
 router.delete('/:id', getPerson, async(request, response) => {
     try {
         await response.person.remove()
@@ -44,7 +39,6 @@ router.delete('/:id', getPerson, async(request, response) => {
     }
 })
 
-//Updating a person
 router.put('/:id', getPerson, async (request, response) => {
     if(request.body.name != null) 
         response.person.name = request.body.name
@@ -73,4 +67,4 @@ async function getPerson(request, response, next) {
     next()
 }
 
-module.exports = router
+module.exports = expenseRouter

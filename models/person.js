@@ -1,19 +1,6 @@
 const mongoose = require('mongoose')
 
-mongoose.set('useFindAndModify', false)
-
-const url = String(process.env.MONGODB_URI)
-console.log(`Connecting to ${url}`)
-
-mongoose.connect(url, { useNewUrlParser: true })
-    .then(() => {
-        console.log("Connected to MongoDB")
-    })
-    .catch((error) => {
-        console.log(`error connecting to MongoDB: ${error.message}`)
-    })
-
-const personSchema = new mongoose.Schema({
+const personSchema = mongoose.Schema({
     name: {
         type: String,
         minlength: 3,
@@ -34,4 +21,6 @@ personSchema.set('toJSON', {
     }
 })
 
-module.exports = mongoose.model('Person', personSchema)
+const Person = mongoose.model('Person', personSchema)
+
+module.exports = Person
