@@ -3,7 +3,10 @@ const Person = require("../models/Person")
 
 router.get('/', async (request, response) => {
     try {
-        const persons = await Person.find()
+        const persons = await Person.find({}).populate('user', {username: 1, name: 1})
+
+        //populating user -- 'user' is the field in User model.
+        
         response.json(persons)
     } 
     catch (error) {
