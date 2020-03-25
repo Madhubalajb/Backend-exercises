@@ -1,7 +1,7 @@
 const personsRouter = require('express').Router()
 const Person = require("../models/person")
 
-router.get('/', async (request, response) => {
+personsRouter.get('/', async (request, response) => {
     try {
         const persons = await Person.find({}).populate('user', {username: 1, name: 1})
 
@@ -14,11 +14,11 @@ router.get('/', async (request, response) => {
     }  
 })
 
-router.get('/:id', getPerson, (request, response) => {
+personsRouter.get('/:id', getPerson, (request, response) => {
     response.json(response.person)
 })
 
-router.post('/', async (request, response) => {
+personsRouter.post('/', async (request, response) => {
     const person = new Person({
         name: request.body.name,
         number: request.body.number
@@ -32,7 +32,7 @@ router.post('/', async (request, response) => {
     }
 })
 
-router.delete('/:id', getPerson, async(request, response) => {
+personsRouter.delete('/:id', getPerson, async(request, response) => {
     try {
         await response.person.remove()
         response.json({message: 'Deleted Person'})
@@ -42,7 +42,7 @@ router.delete('/:id', getPerson, async(request, response) => {
     }
 })
 
-router.put('/:id', getPerson, async (request, response) => {
+personsRouter.put('/:id', getPerson, async (request, response) => {
     if(request.body.name != null) 
         response.person.name = request.body.name
     if(request.body.number != null)
