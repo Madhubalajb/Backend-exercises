@@ -8,7 +8,7 @@ const personsRouter = require('./controllers/persons')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const app = express()
-console.log(config.SECRET)
+
 console.log(`Connecting to ${config.MONGODB_URI}`)
 
 mongoose.connect(config.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
