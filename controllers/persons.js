@@ -1,5 +1,7 @@
 const personsRouter = require('express').Router()
 const Person = require("../models/person")
+const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 personsRouter.get('/', async (request, response) => {
     try {
@@ -19,12 +21,24 @@ personsRouter.get('/:id', getPerson, (request, response) => {
 })
 
 personsRouter.post('/', async (request, response) => {
+    const body = request.body
+
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+    if(!request.token || !decodedToken) {
+        return response.status(401).json({message: 'Token missing or Invalid'})
+    }
+
+    const user = await User.findById(decodedToken.id)
+
     const person = new Person({
-        name: request.body.name,
-        number: request.body.number
+        name: body.name,
+        number: body.number
     })
     try {
         const newPerson = await person.save()
+        user.persons = user.persons.concat(newPerson._id)
+        await user.save()   
         response.status(201).json(newPerson) //Created
     }
     catch(error) {
