@@ -33,7 +33,8 @@ personsRouter.post('/', async (request, response) => {
 
     const person = new Person({
         name: body.name,
-        number: body.number
+        number: body.number,
+        user: user._id
     })
     try {
         const newPerson = await person.save()
