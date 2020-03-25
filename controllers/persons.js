@@ -25,7 +25,7 @@ personsRouter.post('/', async (request, response) => {
 
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-    if(!request.token || !decodedToken) {
+    if(!request.token || !decodedToken.id) {
         return response.status(401).json({message: 'Token missing or Invalid'})
     }
 
@@ -71,16 +71,21 @@ personsRouter.put('/:id', getPerson, async (request, response) => {
 })
 
 async function getPerson(request, response, next) {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
     let person
     try {
+        const user = await User.findById(decodedToken.id)
         person = await Person.findById(request.params.id)
-        if(person == null)
+
+        if(person.user.toString() === user.id.toString()) {
+            response.person = person
+        }
+        else
             return response.status(404).json({message: 'Cannot find person'}) //Not Found
     }
     catch(error) {
-        return response.status(500).json({message: error})
+        next(error)
     }
-    response.person = person
     next()
 }
 
