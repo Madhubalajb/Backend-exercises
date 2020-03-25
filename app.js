@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express()
-
+console.log(config.SECRET)
 console.log(`Connecting to ${config.MONGODB_URI}`)
 
 mongoose.connect(config.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
