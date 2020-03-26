@@ -11,12 +11,10 @@ const personSchema = mongoose.Schema({
         minlength: 8,
         required: true
     },
-    user: [
-        {
+    user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
-    ]
 })
 
 personSchema.set('toJSON', {
