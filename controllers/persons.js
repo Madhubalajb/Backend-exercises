@@ -20,7 +20,7 @@ personsRouter.get('/:id', getPerson, (request, response, next) => {
     response.json(response.person)
 })
 
-personsRouter.post('/', async (request, response) => {
+personsRouter.post('/', async (request, response, next) => {
     const body = request.body
 
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
@@ -57,7 +57,7 @@ personsRouter.delete('/:id', getPerson, async(request, response, next) => {
     }
 })
 
-personsRouter.put('/:id', getPerson, async (request, response, next) => {
+personsRouter.patch('/:id', getPerson, async (request, response, next) => {
     const body = request.body
 
     if(body.name != null) 
