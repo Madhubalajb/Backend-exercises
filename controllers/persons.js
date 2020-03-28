@@ -74,6 +74,8 @@ personsRouter.put('/:id', getPerson, async (request, response, next) => {
 })
 
 async function getPerson(request, response, next) {
+    console.log(request.token)
+    console.log(request.params.id)
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
     let person
     try {
