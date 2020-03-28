@@ -16,7 +16,7 @@ personsRouter.get('/', async (request, response) => {
     }  
 })
 
-personsRouter.get('/:id', getPerson, (request, response) => {
+personsRouter.get('/:id', getPerson, (request, response, next) => {
     response.json(response.person)
 })
 
@@ -47,7 +47,7 @@ personsRouter.post('/', async (request, response) => {
     }
 })
 
-personsRouter.delete('/:id', getPerson, async(request, response) => {
+personsRouter.delete('/:id', getPerson, async(request, response, next) => {
     try {
         await response.person.remove()
         response.json({message: 'Deleted Person'})
@@ -57,11 +57,13 @@ personsRouter.delete('/:id', getPerson, async(request, response) => {
     }
 })
 
-personsRouter.put('/:id', getPerson, async (request, response) => {
-    if(request.body.name != null) 
-        response.person.name = request.body.name
-    if(request.body.number != null)
-        response.person.number = request.body.number
+personsRouter.put('/:id', getPerson, async (request, response, next) => {
+    const body = request.body
+
+    if(body.name != null) 
+        response.person.name = body.name
+    if(body.number != null)
+        response.person.number = body.number
     try {
         const updatedPerson = await response.person.save()
         response.json(updatedPerson) 
