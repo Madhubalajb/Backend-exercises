@@ -26,7 +26,7 @@ personsRouter.get('/:id', async (request, response, next) => {
     }
 })
 
-personsRouter.post('/', async (request, response, next) => {
+personsRouter.post('/', async(request, response, next) => {
     const body = request.body
 
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
@@ -56,6 +56,7 @@ personsRouter.post('/', async (request, response, next) => {
 personsRouter.delete('/:id', async(request, response, next) => {
     try {
         const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
        if(!request.token || !decodedToken.id) {
             return response.status(401).json({message: 'Token missing or Invalid'})
         }
@@ -76,7 +77,7 @@ personsRouter.delete('/:id', async(request, response, next) => {
     }
 })
 
-personsRouter.patch('/:id', async (request, response, next) => {
+personsRouter.patch('/:id', async(request, response, next) => {
     const body = request.body
     try {
         const decodedToken = jwt.verify(request.token, process.env.SECRET)
