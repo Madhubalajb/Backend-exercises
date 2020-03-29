@@ -95,7 +95,7 @@ personsRouter.put('/:id', async(request, response, next) => {
             number: body.number,
             user: user.id
         }
-        const updatedPerson = await User.findByIdAndUpdate(request.params.id, updatePerson, {
+        const updatedPerson = await Person.findByIdAndUpdate(request.params.id, updatePerson, {
             new: true
         })
         response.status(201).json(updatedPerson) 
