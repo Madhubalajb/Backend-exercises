@@ -77,7 +77,7 @@ personsRouter.delete('/:id', async(request, response, next) => {
     }
 })
 
-personsRouter.patch('/:id', async(request, response, next) => {
+personsRouter.put('/:id', async(request, response, next) => {
     const body = request.body
     try {
         const decodedToken = jwt.verify(request.token, process.env.SECRET)
@@ -89,13 +89,15 @@ personsRouter.patch('/:id', async(request, response, next) => {
         const person = await Person.findById(request.params.id)
 
        if(person.user.toString() === user.id.toString()) {
-           
-        if(body.name != null) 
-            response.person.name = body.name
-        if(body.number != null)
-            response.person.number = body.number
         
-        const updatedPerson = await response.person.save()
+        const updatePerson = {
+            name: body.name,
+            number: body.number,
+            user: user.id
+        }
+        const updatedPerson = await User.findByIdAndUpdate(request.params.id, updatePerson, {
+            new: true
+        })
         response.json(updatedPerson) 
        }
     }
