@@ -22,7 +22,7 @@ personsRouter.get('/:id', getPerson, (request, response, next) => {
 
 personsRouter.post('/', async (request, response, next) => {
     const body = request.body
-    console.log(request.token)
+
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
     if(!request.token || !decodedToken.id) {
@@ -47,51 +47,54 @@ personsRouter.post('/', async (request, response, next) => {
     }
 })
 
-personsRouter.delete('/:id', getPerson, async(request, response, next) => {
+personsRouter.delete('/:id', async(request, response, next) => {
     try {
-        await response.person.remove()
-        response.json({message: 'Deleted Person'})
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+       if(!request.token || !decodedToken.id) {
+            return response.status(401).json({message: 'Token missing or Invalid'})
+        }
+
+        const user = await User.findById(decodedToken.id)
+        const person = await Person.findById(request.params.id)
+
+       if(person.user.toString() === user.id.toString()) {
+           await Person.findByIdAndRemove(request.params.id)
+           response.status(201).end()
+       }
+       else {
+           response.status(401).end()
+       }
     }
-    catch(error) {
-        response.status(500).json({message: error}) //Internal server error
+    catch (exception) {
+        next(exception)
     }
 })
 
-personsRouter.patch('/:id', getPerson, async (request, response, next) => {
+personsRouter.patch('/:id', async (request, response, next) => {
     const body = request.body
-
-    if(body.name != null) 
-        response.person.name = body.name
-    if(body.number != null)
-        response.person.number = body.number
     try {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        if(!request.token || !decodedToken.id) {
+            return response.status(401).json({message: 'Token missing or Invalid'})
+        }
+
+        const user = await User.findById(decodedToken.id)
+        const person = await Person.findById(request.params.id)
+
+       if(person.user.toString() === user.id.toString()) {
+           
+        if(body.name != null) 
+            response.person.name = body.name
+        if(body.number != null)
+            response.person.number = body.number
+        
         const updatedPerson = await response.person.save()
         response.json(updatedPerson) 
+       }
     }
-    catch(error) {
-        response.status(400).json({message: error})
+    catch (exception) {
+        next(exception)
     }
 })
-
-async function getPerson(request, response, next) {
-    console.log(request.token)
-    console.log(request.params.id)
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    let person
-    try {
-        const user = await User.findById(decodedToken.id)
-        person = await Person.findById(request.params.id)
-
-        if(person.user.toString() === user.id.toString()) {
-            response.person = person
-        }
-        else
-            return response.status(404).json({message: 'Cannot find person'}) //Not Found
-    }
-    catch(error) {
-        next(error)
-    }
-    next()
-}
 
 module.exports = personsRouter
