@@ -3,7 +3,7 @@ const Person = require("../models/person")
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 
-personsRouter.get('/', async (request, response) => {
+personsRouter.get('/', async (request, response, next) => {
     try {
         const persons = await Person.find({}).populate('user', {username: 1, name: 1})
 
@@ -11,13 +11,19 @@ personsRouter.get('/', async (request, response) => {
         
         response.json(persons)
     } 
-    catch (error) {
-        response.status(500).json({message: error}) //Internal server error
+    catch (exception) {
+        next(exception)
     }  
 })
 
-personsRouter.get('/:id', getPerson, (request, response, next) => {
-    response.json(response.person)
+personsRouter.get('/:id', async (request, response, next) => {
+    try {
+        const person = await Person.findById(request.params.id)
+        response.json(person)
+    }
+    catch (exception){
+        next(exception)
+    }
 })
 
 personsRouter.post('/', async (request, response, next) => {
@@ -42,8 +48,8 @@ personsRouter.post('/', async (request, response, next) => {
         await user.save()   
         response.status(201).json(newPerson) //Created
     }
-    catch(error) {
-        response.status(400).json({message: error}) //Bad Request
+    catch (exception) {
+        next(exception)
     }
 })
 
