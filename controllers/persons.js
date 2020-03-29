@@ -22,7 +22,7 @@ personsRouter.get('/:id', getPerson, (request, response, next) => {
 
 personsRouter.post('/', async (request, response, next) => {
     const body = request.body
-
+    console.log(request.token)
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
     if(!request.token || !decodedToken.id) {
