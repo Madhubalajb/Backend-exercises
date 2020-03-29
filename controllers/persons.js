@@ -78,8 +78,8 @@ personsRouter.delete('/:id', async(request, response, next) => {
 })
 
 personsRouter.put('/:id', async(request, response, next) => {
-    const body = request.body
     try {
+        const body = request.body
         const decodedToken = jwt.verify(request.token, process.env.SECRET)
         if(!request.token || !decodedToken.id) {
             return response.status(401).json({message: 'Token missing or Invalid'})
@@ -98,7 +98,7 @@ personsRouter.put('/:id', async(request, response, next) => {
         const updatedPerson = await User.findByIdAndUpdate(request.params.id, updatePerson, {
             new: true
         })
-        response.json(updatedPerson) 
+        response.status(201).json(updatedPerson) 
        }
     }
     catch (exception) {
